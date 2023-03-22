@@ -1083,7 +1083,7 @@ static u8 *build_protoscan_packet(const struct sockaddr_storage *src,
     case IPPROTO_TCP:
       packet = build_tcp_raw(&src_in->sin_addr, &dst_in->sin_addr,
                              o.ttl, ipid, IP_TOS_DEFAULT, false, o.ipoptions, o.ipoptionslen,
-                             sport, DEFAULT_TCP_PROBE_PORT, get_random_u32(), get_random_u32(), 0, TH_ACK, 0, 0, NULL, 0,
+                             sport, DEFAULT_TCP_PROBE_PORT, get_random_u32(), get_random_u32(), 0, TH_ACK, o.win, 0, NULL, 0,
                              o.extra_payload, o.extra_payload_length, packetlen);
       break;
     case IPPROTO_ICMP:
@@ -1132,7 +1132,7 @@ static u8 *build_protoscan_packet(const struct sockaddr_storage *src,
     case IPPROTO_TCP:
       packet = build_tcp_raw_ipv6(&src_in6->sin6_addr, &dst_in6->sin6_addr,
                                   0, ipid, o.ttl,
-                                  sport, DEFAULT_TCP_PROBE_PORT, get_random_u32(), get_random_u32(), 0, TH_ACK, 0, 0, NULL, 0,
+                                  sport, DEFAULT_TCP_PROBE_PORT, get_random_u32(), get_random_u32(), 0, TH_ACK, o.win, 0, NULL, 0,
                                   o.extra_payload, o.extra_payload_length, packetlen);
       break;
     case IPPROTO_ICMPV6:
@@ -1232,7 +1232,7 @@ UltraProbe *sendIPScanProbe(UltraScanInfo *USI, HostScanStats *hss,
                                o.ttl, ipid, IP_TOS_DEFAULT, false,
                                o.ipoptions, o.ipoptionslen,
                                sport, pspec->pd.tcp.dport,
-                               seq, ack, 0, pspec->pd.tcp.flags, 0, 0,
+                               seq, ack, 0, pspec->pd.tcp.flags, o.win, 0,
                                tcpops, tcpopslen,
                                o.extra_payload, o.extra_payload_length,
                                &packetlen);
@@ -1248,7 +1248,7 @@ UltraProbe *sendIPScanProbe(UltraScanInfo *USI, HostScanStats *hss,
       for (decoy = 0; decoy < o.numdecoys; decoy++) {
         packet = build_tcp_raw_ipv6(&((struct sockaddr_in6 *)&o.decoys[decoy])->sin6_addr, hss->target->v6hostip(),
                                   0, 0, o.ttl, sport, pspec->pd.tcp.dport,
-                                  seq, ack, 0, pspec->pd.tcp.flags, 0, 0,
+                                  seq, ack, 0, pspec->pd.tcp.flags, o.win, 0,
                                   tcpops, tcpopslen,
                                   o.extra_payload, o.extra_payload_length,
                                   &packetlen);

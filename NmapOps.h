@@ -291,6 +291,7 @@ class NmapOps {
   FILE *logfd[LOG_NUM_FILES];
   FILE *nmap_stdout; /* Nmap standard output */
   int ttl; // Time to live
+  int win; //TCP Receive Windows Size
   bool badsum;
   char *datadir;
   /* A map from abstract data file names like "nmap-services" and "nmap-os-db"

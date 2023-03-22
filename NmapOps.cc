@@ -286,6 +286,7 @@ void NmapOps::Initialize() {
   append_output = false;
   memset(logfd, 0, sizeof(FILE *) * LOG_NUM_FILES);
   ttl = -1;
+  win =0;
   badsum = false;
   nmap_stdout = stdout;
   gettimeofday(&start_time, NULL);

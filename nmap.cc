@@ -279,7 +279,8 @@ static void printusage() {
          "  --data-length <num>: Append random data to sent packets\n"
          "  --ip-options <options>: Send packets with specified ip options\n"
          "  --ttl <val>: Set IP time-to-live field\n"
-         "  --spoof-mac <mac address/prefix/vendor name>: Spoof your MAC address\n"
+         "  --win <val>: Set TCP receive window size field\n"
+	 "  --spoof-mac <mac address/prefix/vendor name>: Spoof your MAC address\n"
          "  --badsum: Send packets with a bogus TCP/UDP/SCTP checksum\n"
          "OUTPUT:\n"
          "  -oN/-oX/-oS/-oG <file>: Output scan in normal, XML, s|<rIpt kIddi3,\n"
@@ -588,6 +589,7 @@ void parse_options(int argc, char **argv) {
     {"thc", no_argument, 0, 0},
     {"badsum", no_argument, 0, 0},
     {"ttl", required_argument, 0, 0}, /* Time to live */
+    {"win", required_argument, 0, 0}, /* TCP Receive Window Size */ 
     {"traceroute", no_argument, 0, 0},
     {"reason", no_argument, 0, 0},
     {"allports", no_argument, 0, 0},
@@ -745,7 +747,12 @@ void parse_options(int argc, char **argv) {
           if (o.ttl < 0 || o.ttl > 255) {
             fatal("ttl option must be a number between 0 and 255 (inclusive)");
           }
-        } else if (strcmp(long_options[option_index].name, "datadir") == 0) {
+        } else if (strcmp(long_options[option_index].name, "win") == 0) {
+          o.win = atoi(optarg);
+          if (o.win < 0 || o.win > 65535) {
+            fatal("win option must be a number between 0 and 65535 (inclusive)");
+          }
+	} else if (strcmp(long_options[option_index].name, "datadir") == 0) {
           o.datadir = strdup(optarg);
         } else if (strcmp(long_options[option_index].name, "servicedb") == 0) {
           o.requested_data_files["nmap-services"] = optarg;
